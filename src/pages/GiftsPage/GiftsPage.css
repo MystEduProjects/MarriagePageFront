@@ -1,0 +1,7 @@
+#objectsGrid {
+  display: grid;
+  grid-template-columns: 24% 24% 24% 24%;
+  gap: 1%;
+  width: 100%;
+  grid-template-rows: 40%;
+}
