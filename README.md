@@ -7,6 +7,19 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Technologies
+
+- **Node** version 22.12.0
+- **yarn** version 1.22.22
+
+## Setup
+
+```bash
+nvm use 22.12.0   # Use the specific node version or set it default with nvm use default 22.12.0
+yarn install      # Install dependencies (loads node_modules)
+yarn dev          # Start the project
+```
+
 ## React Compiler
 
 The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
