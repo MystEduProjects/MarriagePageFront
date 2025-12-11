@@ -10,6 +10,7 @@ const GiftsPage = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [gifts, setGifts] = useState([]);
 
+  /* fetch data */
   useEffect(() => {
     async function fetchGifts() {
       try {
@@ -26,8 +27,23 @@ const GiftsPage = () => {
     fetchGifts();
   }, [])
 
+  /* set localstorage if it isn't yet */
+  useEffect(() => {
+    const cartItems = localStorage.getItem('cartGifts');
+    if (!cartItems) localStorage.setItem('cartGifts', JSON.stringify([]));
+  }, [])
+
   function openCart() {
     setIsCartOpen(true);
+  }
+  function closeCart() {
+    setIsCartOpen(false);
+  }
+
+  function addItem(object) {
+    let cartItems = JSON.parse(localStorage.getItem('cartGifts'));
+    cartItems.push(object);
+    localStorage.setItem('cartGifts', JSON.stringify(cartItems));
   }
 
   return (
@@ -42,12 +58,17 @@ const GiftsPage = () => {
         </section>
         <section id="objectsGrid">
           {gifts.map((object, index) => (
-            <GiftCard key={index} title={object.name} img={object.img} price={object.price} orientation={'vertical'} />
+            <GiftCard key={index} 
+              title={object.name} 
+              img={object.img} 
+              price={object.price} 
+              orientation={'vertical'}
+              addItem={() => addItem(object)} />
           ))}
         </section>
       </div>
 
-      {isCartOpen && <Modal content={<Cart />} classType={'cart'} />}
+      {isCartOpen && <Modal content={<Cart />} classType={'cart'} onClose={closeCart} />}
     </div>
   )
 }

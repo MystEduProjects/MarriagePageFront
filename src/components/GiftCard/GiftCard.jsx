@@ -1,6 +1,6 @@
 import './GiftCard.css';
 
-const GiftCard = ({ title, img, price, orientation}) => {
+const GiftCard = ({ title, img, price, orientation, addItem}) => {
   return (
     <div className={`card ${orientation}-card`}>
       <p className='objectTitle'>{title}</p>
@@ -8,7 +8,7 @@ const GiftCard = ({ title, img, price, orientation}) => {
         <img src={img} />
       </div>
       <p className='objectPrice'>{price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
-      <button>Añadir</button>
+      <button onClick={addItem}>Añadir</button>
     </div>
   )
 }
