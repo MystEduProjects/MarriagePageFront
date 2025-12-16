@@ -30,7 +30,7 @@ const GiftsPage = () => {
   /* set localstorage if it isn't yet */
   useEffect(() => {
     const cartItems = localStorage.getItem('cartGifts');
-    if (!cartItems) localStorage.setItem('cartGifts', JSON.stringify([]));
+    if (!cartItems) localStorage.setItem('cartGifts', JSON.stringify({}));
   }, [])
 
   function openCart() {
@@ -42,7 +42,9 @@ const GiftsPage = () => {
 
   function addItem(object) {
     let cartItems = JSON.parse(localStorage.getItem('cartGifts'));
-    cartItems.push(object);
+    cartItems[object._id] ?
+      cartItems[object._id].quantity += 1
+      : cartItems[object._id] = { quantity: 1, ...object };
     localStorage.setItem('cartGifts', JSON.stringify(cartItems));
   }
 
