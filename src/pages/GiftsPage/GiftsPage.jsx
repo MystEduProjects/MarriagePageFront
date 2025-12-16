@@ -31,6 +31,9 @@ const GiftsPage = () => {
   useEffect(() => {
     const cartItems = localStorage.getItem('cartGifts');
     if (!cartItems) localStorage.setItem('cartGifts', JSON.stringify({}));
+    
+    const cartTotalPrice = localStorage.getItem('cartTotalPrice');
+    if (!cartTotalPrice) localStorage.setItem('cartTotalPrice', JSON.stringify(0));
   }, [])
 
   function openCart() {
@@ -42,10 +45,13 @@ const GiftsPage = () => {
 
   function addItem(object) {
     let cartItems = JSON.parse(localStorage.getItem('cartGifts'));
+    let totalPrice = JSON.parse(localStorage.getItem('cartTotalPrice'));
     cartItems[object._id] ?
       cartItems[object._id].quantity += 1
       : cartItems[object._id] = { quantity: 1, ...object };
+    totalPrice += cartItems[object._id].price;
     localStorage.setItem('cartGifts', JSON.stringify(cartItems));
+    localStorage.setItem('cartTotalPrice', JSON.stringify(totalPrice));
   }
 
   return (
