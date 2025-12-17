@@ -14,9 +14,19 @@ const GiftsPage = () => {
   useEffect(() => {
     async function fetchGifts() {
       try {
-        const response = await fetch(`${URL}/gifts`);
-        if (!response.ok) return;
-        const data = await response.json();
+        let data;
+        const storedData = JSON.parse(localStorage.getItem('storedGifts'));
+        if (!storedData) {
+          const response = await fetch(`${URL}/gifts`);
+          if (!response.ok) return;
+          data = await response.json();
+          localStorage.setItem('storedGifts', JSON.stringify(data));
+          console.log('Saved gifts in localStorage');
+        }
+        else {
+          data = storedData;
+          console.log('Gifts found stored in localStorage')
+        }
         setGifts(data);
         console.log(data);
       }
