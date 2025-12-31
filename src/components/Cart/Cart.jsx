@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import GiftCard from "../GiftCard/GiftCard"
 import './Cart.css'
+import { useNavigate } from "react-router-dom";
 
-function Cart() {
+function Cart({ withButton=true }) {
   const [gifts, setGifts] = useState(JSON.parse(localStorage.getItem('cartGifts')) || {});
   const [total, setTotal] = useState(JSON.parse(localStorage.getItem('cartTotalPrice')) || 0);
   const [calculatingTotal, setCalculatingTotal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCalculatingTotal(true);
@@ -29,6 +31,10 @@ function Cart() {
     });
   }
 
+  function goToPay() {
+    navigate('/pago');
+  }
+
   return (
     <>
       <p>Carrito de regalos</p>
@@ -40,7 +46,9 @@ function Cart() {
           ))}
       </section>
       <p>total: {total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
-      <button disabled={Object.values(gifts).length == 0 || calculatingTotal}>Ir a pagar</button>
+      {withButton && 
+        <button onClick={goToPay} disabled={Object.values(gifts).length == 0 || calculatingTotal}>Ir a pagar</button>
+      }
     </>
   )
 }

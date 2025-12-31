@@ -4,8 +4,9 @@ import './GiftsPage.css';
 import Modal from "../../components/Modal/Modal";
 import Cart from "../../components/Cart/Cart";
 
+const URL = 'http://localhost:3000';
+
 const GiftsPage = () => {
-  const URL = 'http://localhost:3000'
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [gifts, setGifts] = useState([]);
