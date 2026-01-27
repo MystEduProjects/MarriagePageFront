@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import GiftCard from "../../components/GiftCard/GiftCard";
-import './GiftsPage.css';
 import Modal from "../../components/Modal/Modal";
 import Cart from "../../components/Cart/Cart";
 
@@ -63,7 +62,7 @@ const GiftsPage = () => {
 
     const newCart = { 
       ...cart, 
-      [object._id]: { quantity: 1, ...object } 
+      [object._id]: { ...object } 
     };
 
     // Actualizamos estado y storage
@@ -74,16 +73,6 @@ const GiftsPage = () => {
     let totalPrice = JSON.parse(localStorage.getItem('cartTotalPrice')) || 0;
     totalPrice += object.price;
     localStorage.setItem('cartTotalPrice', JSON.stringify(totalPrice));
-
-
-    // let cartItems = JSON.parse(localStorage.getItem('cartGifts'));
-    // let totalPrice = JSON.parse(localStorage.getItem('cartTotalPrice'));
-    // cartItems[object._id] ?
-    //   cartItems[object._id].quantity += 1
-    //   : cartItems[object._id] = { quantity: 1, ...object };
-    // totalPrice += cartItems[object._id].price;
-    // localStorage.setItem('cartGifts', JSON.stringify(cartItems));
-    // localStorage.setItem('cartTotalPrice', JSON.stringify(totalPrice));
   }
 
   function removeItem(id) {
@@ -102,29 +91,70 @@ const GiftsPage = () => {
   };
 
   return (
-    <div style={{width: "100%"}}>
-      <h2>Regalos</h2>
-      <p>Lirem texto de relleno algo va aqui</p>
-      <div style={{width: "100%"}}>
-        <section>
-          <button>Filtros</button>
-          <button>Ordenar</button>
-          <button onClick={openCart}>Carrito</button>
+    <div className="min-h-screen bg-[#faf9f6] text-[#4a4a4a] font-serif">
+      {/* Header / Hero Section */}
+      <header className="py-16 px-4 text-center border-b border-[#eeeae3] bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl mb-4 font-light italic text-[#2d3436]">
+          Lista de Regalos
+        </h2>
+        <p className="max-w-xl mx-auto text-sm md:text-base text-[#8c8c8c] font-sans tracking-wide leading-relaxed">
+          Tu presencia es nuestro mayor regalo, pero si deseas tener un detalle con nosotros, aquí tienes algunas ideas.
+        </p>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* Toolbar: Filtros y Carrito */}
+        <section className="flex justify-between items-center mb-12 border-b border-[#eeeae3] pb-6">
+          <div className="space-x-4 font-sans text-xs uppercase tracking-[0.2em] text-[#a0a0a0]">
+            <button className="hover:text-[#2d3436] transition-colors cursor-pointer">Filtros</button>
+            <span className="text-[#eeeae3]">|</span>
+            <button className="hover:text-[#2d3436] transition-colors cursor-pointer">Ordenar</button>
+          </div>
+          
+          <button 
+            onClick={openCart}
+            className="flex items-center gap-2 bg-[#2d3436] text-white px-6 py-2 rounded-full text-xs uppercase tracking-widest hover:bg-[#4a4a4a] transition-all shadow-md group"
+          >
+            Carrito 
+            <span className="bg-white/20 px-2 rounded-full group-hover:bg-white/30">
+              {Object.keys(cart).length}
+            </span>
+          </button>
         </section>
-        <section id="objectsGrid">
-          {gifts.map((object, index) => (
-            <GiftCard key={index} 
+
+        {/* Grid de Regalos */}
+        <section 
+          id="objectsGrid" 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
+        >
+          {gifts.map((object) => (
+            <GiftCard 
+              key={object._id} 
               title={object.name} 
               img={object.img} 
               price={object.price} 
               orientation={'vertical'}
               addItem={() => addItem(object)}
-              isInCart={!!cart[object._id]} />
+              isInCart={!!cart[object._id]} 
+            />
           ))}
         </section>
-      </div>
+      </main>
 
-      {isCartOpen && <Modal content={<Cart itemRemover={removeItem} cartItems={cart} />} classType={'cart'} onClose={closeCart} />}
+      {/* Footer Decorativo */}
+      <footer className="py-20 text-center opacity-40">
+        <div className="inline-block p-4 border-t border-b border-[#d1d1d1] italic">
+          Gracias por acompañarnos
+        </div>
+      </footer>
+
+      {isCartOpen && (
+        <Modal 
+          content={<Cart itemRemover={removeItem} cartItems={cart} />} 
+          classType={'cart'} 
+          onClose={closeCart} 
+        />
+      )}
     </div>
   )
 }
