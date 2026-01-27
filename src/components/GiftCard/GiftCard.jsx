@@ -1,6 +1,6 @@
 import './GiftCard.css';
 
-const GiftCard = ({ title, img, price, orientation, addItem, quantity=1, onDelete}) => {
+const GiftCard = ({ title, img, price, orientation, cardType='', addItem, isInCart=true, onDelete}) => {
   if (orientation == 'horizontal') {
     return (
       <div className={`card ${orientation}-card`}>
@@ -8,26 +8,25 @@ const GiftCard = ({ title, img, price, orientation, addItem, quantity=1, onDelet
         <div className='objectImage'>
           <img src={img} />
         </div>
-        <p className='objectPrice'>{price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })} c/u</p>
-        <div className='objectQuantityContainer'>
-          <button>-</button>
-          <p>{quantity}</p>
-          <button>+</button>
-        </div>
-        <div className='closeButton' onClick={onDelete}>X</div>
+        <p className='objectPrice'>{price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
+        {cardType != 'pago' && <div className='closeButton' onClick={onDelete}>X</div>}
       </div>
     )
   }
 
   else if (orientation == 'vertical') {
     return (
-      <div className={`card ${orientation}-card`}>
+      <div className={`card ${orientation}-card ${isInCart ? 'selected' : ''}`}>
         <p className='objectTitle'>{title}</p>
         <div className='objectImage'>
-          <img src={img} />
+          <img src={img} alt={title} />
         </div>
         <p className='objectPrice'>{price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
-        <button onClick={addItem}>Añadir</button>
+        <button 
+          onClick={addItem}
+          disabled={isInCart}>
+            {isInCart ? 'Añadido' : 'Añadir'}
+          </button>
       </div>
     )
   }

@@ -7,6 +7,7 @@ import Modal from '../../components/Modal/Modal';
 const URL = 'http://localhost:3000';
 
 const PurchasePage = () => {
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cartGifts')) || {});
   const [values, setValues] = useState({
     name: 'Nombre Apellido',
     message: 'Mensaje motivacional',
@@ -94,8 +95,8 @@ const PurchasePage = () => {
       </section>
 
       <section className='cart'>
-        <Cart withButton={false} />
-        <button form='purchaseForm' type='submit' disabled={!values.method}>Continuar</button>
+        <Cart withButton={false} cartType='pago' cartItems={cart} />
+        <button form='purchaseForm' type='submit' disabled={!values.method || Object.keys(cart).length === 0}>Continuar</button>
       </section>
       
       {continueConfirmation && 
