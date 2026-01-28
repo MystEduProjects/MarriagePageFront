@@ -1,16 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+
+const URL = 'http://localhost:3000';
 
 const RSVPForm = ({ onClose }) => {
-  // Simulación de tu lista de invitados (esto vendría de tu DB)
-  const guests = [
-    { id: "2", name: "María José García", canHavePlusOne: false },
-    { id: "3", name: "Roberto Muñoz", canHavePlusOne: true },
-    { id: "4", name: "Ana María Soto", canHavePlusOne: false },
-    { id: "5", name: "Juanito Pérez", canHavePlusOne: false },
-    { id: "6", name: "Juanito Segundo", canHavePlusOne: true },
-    { id: "7", name: "Juan De Agrario", canHavePlusOne: false },
-  ];
-
+  
+  const [guests, setGuests] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [isListOpen, setIsListOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
@@ -21,6 +15,24 @@ const RSVPForm = ({ onClose }) => {
     allergies: "",
     plusOneName: ""
   });
+
+
+  useEffect(() => {
+    async function fetchPeople() {
+      try {
+        let data;
+        const response = await fetch(`${URL}/people`);
+        if (!response.ok) return;
+        data = await response.json();
+        setGuests(data);
+        console.log(data);
+      }
+      catch (error) {
+        console.log('ERROR FETCHING ->',error)
+      }
+    }
+    fetchPeople();
+  }, [])
 
   // Filtramos la lista según lo que el usuario escribe
   const filteredGuests = useMemo(() => {
@@ -78,7 +90,7 @@ const RSVPForm = ({ onClose }) => {
                 {filteredGuests.length > 0 ? (
                   filteredGuests.map(guest => (
                     <li 
-                      key={guest.id}
+                      key={guest._id}
                       onClick={() => handleSelect(guest)}
                       className="px-6 py-4 hover:bg-[#faf9f6] cursor-pointer text-sm text-[#4a4a4a] border-b border-[#faf9f6] last:border-none transition-colors flex items-center justify-between group"
                     >
@@ -138,7 +150,7 @@ const RSVPForm = ({ onClose }) => {
                   />
                 </div>
 
-                {selectedGuest.canHavePlusOne && (
+                {selectedGuest.availableEscort && (
                   <div className="flex flex-col gap-2">
                     <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Nombre de tu acompañante</label>
                     <input 
