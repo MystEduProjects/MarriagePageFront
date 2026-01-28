@@ -8,10 +8,10 @@ import MainPage from './pages/MainPage/MainPage';
 function Router() {
   return (
     <Routes>
-      <Route path={ `${BASE_PATH}/` } element={ <MainPage /> } />
-      <Route path={ `${BASE_PATH}/regalos` } element={ <MainPage /> } />
-      <Route path={ `${BASE_PATH}/pago` } element={ <PurchasePage /> } />
-      <Route path={ `${BASE_PATH}/confirmacion-pago` } element={ <ConfirmationPage /> } />
+      <Route path={ '/' } element={ <MainPage /> } />
+      <Route path={ `/regalos` } element={ <MainPage /> } />
+      <Route path={ `/pago` } element={ <PurchasePage /> } />
+      <Route path={ `/confirmacion-pago` } element={ <ConfirmationPage /> } />
     </Routes>
   )
 }
