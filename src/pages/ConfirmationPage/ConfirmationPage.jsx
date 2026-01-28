@@ -12,14 +12,6 @@ const ConfirmationPage = () => {
 
   return (
     <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center p-6 text-[#4a4a4a] font-serif relative overflow-hidden">
-      
-      {/* Decoración Floral Sutil (Fondo) */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-10 pointer-events-none rotate-90">
-        <img src="https://www.transparentpng.com/download/floral/vintage-flower-decoration-png-3.png" alt="decor" />
-      </div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 opacity-10 pointer-events-none -rotate-90">
-        <img src="https://www.transparentpng.com/download/floral/vintage-flower-decoration-png-3.png" alt="decor" />
-      </div>
 
       <main className="max-w-2xl w-full text-center bg-white/40 backdrop-blur-sm p-12 md:p-20 rounded-[3rem] border border-white shadow-sm animate-in fade-in zoom-in duration-1000">
         

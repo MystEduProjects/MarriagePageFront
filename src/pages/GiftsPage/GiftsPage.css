@@ -1,9 +1,0 @@
-#objectsGrid {
-  display: grid;
-  grid-template-columns: 17% 17% 17% 17% 17%;
-  width: 100%;
-  grid-auto-rows: 15rem;
-  justify-content: space-between;
-  justify-items: center;
-  row-gap: 1rem;
-}
