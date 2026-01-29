@@ -5,7 +5,7 @@ import { BASE_PATH } from './PARAMS.json';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: `${BASE_PATH}/`,
+  base: import.meta.env.VITE_BASE_PATH || '/MarriagePageFront',
   server: {
     watch: {
       usePolling: true
