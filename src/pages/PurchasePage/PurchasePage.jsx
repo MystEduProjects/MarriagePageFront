@@ -3,7 +3,7 @@ import Cart from '../../components/Cart/Cart';
 import { useState } from 'react';
 import Modal from '../../components/Modal/Modal';
 
-const URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const PurchasePage = () => {
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cartGifts')) || {});
@@ -31,7 +31,7 @@ const PurchasePage = () => {
 
     if (values.method == 'webpay') {
       const total = JSON.parse(localStorage.getItem('cartTotalPrice'));
-      const response = await fetch(`${URL}/transaction`, {
+      const response = await fetch(`${API_URL}/transaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
