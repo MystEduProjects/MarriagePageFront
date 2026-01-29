@@ -16,18 +16,19 @@ const GiftsPage = () => {
     async function fetchGifts() {
       try {
         let data;
-        const storedData = JSON.parse(localStorage.getItem('storedGifts'));
-        if (!storedData) {
+        /* LÓGICA PARA PROCESADO RÁPIDO DE DATOS. DESACTIVADA HASTA VERSIÓN ESTABLE EN PRODUCCIÓN CON DATOS CONSISTENTES */
+        // const storedData = JSON.parse(localStorage.getItem('storedGifts'));
+        // if (!storedData) {
           const response = await fetch(`${API_URL}/gifts`);
           if (!response.ok) return;
           data = await response.json();
-          localStorage.setItem('storedGifts', JSON.stringify(data));
-          console.log('Saved gifts in localStorage');
-        }
-        else {
-          data = storedData;
-          console.log('Gifts found stored in localStorage')
-        }
+          // localStorage.setItem('storedGifts', JSON.stringify(data));
+          // console.log('Saved gifts in localStorage');
+        // }
+        // else {
+          // data = storedData;
+          // console.log('Gifts found stored in localStorage')
+        // }
         setGifts(data);
         console.log(data);
       }
