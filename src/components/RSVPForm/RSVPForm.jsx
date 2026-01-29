@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 
-const URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const RSVPForm = ({ onClose }) => {
   
@@ -21,7 +21,7 @@ const RSVPForm = ({ onClose }) => {
     async function fetchPeople() {
       try {
         let data;
-        const response = await fetch(`${URL}/people`);
+        const response = await fetch(`${API_URL}/people`);
         if (!response.ok) return;
         data = await response.json();
         setGuests(data);

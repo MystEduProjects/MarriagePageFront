@@ -3,7 +3,7 @@ import GiftCard from "../../components/GiftCard/GiftCard";
 import Modal from "../../components/Modal/Modal";
 import Cart from "../../components/Cart/Cart";
 
-const URL = 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const GiftsPage = () => {
   const [cart, setCart] = useState({});
@@ -18,7 +18,7 @@ const GiftsPage = () => {
         let data;
         const storedData = JSON.parse(localStorage.getItem('storedGifts'));
         if (!storedData) {
-          const response = await fetch(`${URL}/gifts`);
+          const response = await fetch(`${API_URL}/gifts`);
           if (!response.ok) return;
           data = await response.json();
           localStorage.setItem('storedGifts', JSON.stringify(data));
