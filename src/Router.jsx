@@ -1,5 +1,4 @@
 import React from 'react';
-import { BASE_PATH } from '../PARAMS.json';
 import { Routes, Route } from 'react-router-dom';
 import PurchasePage from './pages/PurchasePage/PurchasePage';
 import ConfirmationPage from './pages/ConfirmationPage/ConfirmationPage';
