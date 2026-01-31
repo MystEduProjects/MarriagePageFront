@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import GiftCard from "../../components/GiftCard/GiftCard";
 import Modal from "../../components/Modal/Modal";
 import Cart from "../../components/Cart/Cart";
@@ -10,6 +10,8 @@ const GiftsPage = () => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [gifts, setGifts] = useState([]);
+  const [sortOrder, setSortOrder] = useState("default");
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
   /* fetch data */
   useEffect(() => {
@@ -39,7 +41,7 @@ const GiftsPage = () => {
     fetchGifts();
   }, [])
 
-  /* set localstorage if it isn't yet */
+  /* set localstorage cart if it isn't yet */
   useEffect(() => {
     const cartItems = localStorage.getItem('cartGifts');
     if (!cartItems) localStorage.setItem('cartGifts', JSON.stringify({}));
@@ -49,6 +51,22 @@ const GiftsPage = () => {
     const cartTotalPrice = localStorage.getItem('cartTotalPrice');
     if (!cartTotalPrice) localStorage.setItem('cartTotalPrice', JSON.stringify(0));
   }, [])
+
+  // 2. Lógica de ordenado
+  const sortedGifts = useMemo(() => {
+    let result = [...gifts];
+
+    switch (sortOrder) {
+      case "price-asc":
+        return result.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return result.sort((a, b) => b.price - a.price);
+      case "name-asc":
+        return result.sort((a, b) => a.name.localeCompare(b.name));
+      default:
+        return result; // Orden original de la DB
+    }
+  }, [gifts, sortOrder]);
 
   function openCart() {
     setIsCartOpen(true);
@@ -106,10 +124,41 @@ const GiftsPage = () => {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {/* Toolbar: Filtros y Carrito */}
         <section className="flex justify-between items-center mb-12 border-b border-[#eeeae3] pb-6">
-          <div className="space-x-4 font-sans text-xs uppercase tracking-[0.2em] text-[#a0a0a0]">
+          <div className="flex items-center space-x-4 font-sans text-xs uppercase tracking-[0.2em] text-[#a0a0a0] relative">
             <button className="hover:text-[#2d3436] transition-colors cursor-pointer">Filtros</button>
             <span className="text-[#eeeae3]">|</span>
-            <button className="hover:text-[#2d3436] transition-colors cursor-pointer">Ordenar</button>
+            
+            {/* Botón de Ordenar con Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsSortOpen(!isSortOpen)}
+                className="hover:text-[#2d3436] transition-colors cursor-pointer flex items-center gap-1"
+              >
+                Ordenar {sortOrder !== "default" && "•"}
+              </button>
+
+              {isSortOpen && (
+                <div className="absolute top-full left-0 mt-4 w-48 bg-white border border-[#eeeae3] rounded-lg shadow-xl py-2 z-50 normal-case tracking-normal font-sans">
+                  {[
+                    { id: 'default', label: 'Destacados' },
+                    { id: 'price-asc', label: 'Precio: Menor a Mayor' },
+                    { id: 'price-desc', label: 'Precio: Mayor a Menor' },
+                    { id: 'name-asc', label: 'Nombre: A-Z' },
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => {
+                        setSortOrder(option.id);
+                        setIsSortOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-[#faf9f6] ${sortOrder === option.id ? 'text-[#2d3436] font-bold' : 'text-[#8c8c8c]'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           
           <button 
@@ -128,7 +177,7 @@ const GiftsPage = () => {
           id="objectsGrid" 
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
         >
-          {gifts.map((object) => (
+          {sortedGifts.map((object) => (
             <GiftCard 
               key={object._id} 
               title={object.name} 
