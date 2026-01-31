@@ -12,6 +12,9 @@ const GiftsPage = () => {
   const [gifts, setGifts] = useState([]);
   const [sortOrder, setSortOrder] = useState("default");
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("Todas");
+  const [availableLabels, setAvailableLabels] = useState([]);
 
   /* fetch data */
   useEffect(() => {
@@ -52,21 +55,42 @@ const GiftsPage = () => {
     if (!cartTotalPrice) localStorage.setItem('cartTotalPrice', JSON.stringify(0));
   }, [])
 
-  // 2. Lógica de ordenado
-  const sortedGifts = useMemo(() => {
-    let result = [...gifts];
-
-    switch (sortOrder) {
-      case "price-asc":
-        return result.sort((a, b) => a.price - b.price);
-      case "price-desc":
-        return result.sort((a, b) => b.price - a.price);
-      case "name-asc":
-        return result.sort((a, b) => a.name.localeCompare(b.name));
-      default:
-        return result; // Orden original de la DB
+  useEffect(() => {
+    async function fetchLabels() {
+      try {
+        const response = await fetch(`${API_URL}/gifts/labels`);
+        if (response.ok) {
+          const data = await response.json();
+          setAvailableLabels(["Todas", ...data]);
+        }
+      } catch (error) {
+        console.error("Error fetching labels:", error);
+      }
     }
-  }, [gifts, sortOrder]);
+    fetchLabels();
+  }, []);
+
+  // 2. Lógica de Filtrado + Ordenado (Encadenados)
+  const processedGifts = useMemo(() => {
+    // 1. Filtrar
+    let result = gifts.filter(gift => {
+      if (selectedCategory === "Todas") return true;
+      
+      // Verificamos si la categoría seleccionada existe dentro del array labels
+      return gift.labels && gift.labels.includes(selectedCategory);
+    });
+
+    // 2. Ordenar (reutilizamos tu lógica actual)
+    const sorted = [...result]; // Copia para no mutar el filtrado
+    switch (sortOrder) {
+      case "price-asc": sorted.sort((a, b) => a.price - b.price); break;
+      case "price-desc": sorted.sort((a, b) => b.price - a.price); break;
+      case "name-asc": sorted.sort((a, b) => a.name.localeCompare(b.name)); break;
+      default: break; 
+    }
+
+    return sorted;
+  }, [gifts, selectedCategory, sortOrder]);
 
   function openCart() {
     setIsCartOpen(true);
@@ -125,7 +149,12 @@ const GiftsPage = () => {
         {/* Toolbar: Filtros y Carrito */}
         <section className="flex justify-between items-center mb-12 border-b border-[#eeeae3] pb-6">
           <div className="flex items-center space-x-4 font-sans text-xs uppercase tracking-[0.2em] text-[#a0a0a0] relative">
-            <button className="hover:text-[#2d3436] transition-colors cursor-pointer">Filtros</button>
+            <button 
+              onClick={() => setIsFilterOpen(true)}
+              className="hover:text-[#2d3436] transition-colors cursor-pointer flex items-center gap-1"
+            >
+              Filtros {selectedCategory !== "Todas" && "•"}
+            </button>
             <span className="text-[#eeeae3]">|</span>
             
             {/* Botón de Ordenar con Dropdown */}
@@ -177,7 +206,7 @@ const GiftsPage = () => {
           id="objectsGrid" 
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12"
         >
-          {sortedGifts.map((object) => (
+          {processedGifts.map((object) => (
             <GiftCard 
               key={object._id} 
               title={object.name} 
@@ -205,6 +234,46 @@ const GiftsPage = () => {
           onClose={closeCart} 
         />
       )}
+
+      {/* OVERLAY PARA CERRAR AL HACER CLIC FUERA */}
+      {isFilterOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100] transition-opacity"
+          onClick={() => setIsFilterOpen(false)}
+        />
+      )}
+
+      {/* SIDEBAR DE FILTROS */}
+      <aside className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-[110] transform transition-transform duration-300 ease-in-out p-8 ${isFilterOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex justify-between items-center mb-10">
+          <h3 className="text-xl font-light italic">Filtros</h3>
+          <button onClick={() => setIsFilterOpen(false)} className="text-[#a0a0a0] hover:text-black">✕</button>
+        </div>
+
+        <div className="space-y-8">
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] mb-4">Categorías</h4>
+              <div className="flex flex-col gap-3">
+                {availableLabels.map(label => (
+                  <button
+                    key={label}
+                    onClick={() => setSelectedCategory(label)}
+                    className={`text-left text-sm transition-colors py-1 ${
+                      selectedCategory === label 
+                        ? 'text-[#2d3436] font-bold border-l-2 border-[#2d3436] pl-3' 
+                        : 'text-[#8c8c8c] hover:text-[#2d3436] pl-3'
+                    }`}
+                  >
+                    {/* Capitalizamos la primera letra para que se vea mejor */}
+                    {label.charAt(0).toUpperCase() + label.slice(1)}
+                  </button>
+                ))}
+              </div>
+          </div>
+          
+          {/* Podrías añadir más filtros aquí, como rango de precio */}
+        </div>
+      </aside>
     </div>
   )
 }
