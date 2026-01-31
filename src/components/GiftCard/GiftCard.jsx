@@ -1,5 +1,5 @@
 
-const GiftCard = ({ title, img, price, orientation, cardType='', addItem, isInCart=true, onDelete}) => {
+const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem, isInCart=true, onDelete}) => {
   // Estilo común para los precios
   const formattedPrice = price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 
@@ -55,6 +55,17 @@ const GiftCard = ({ title, img, price, orientation, cardType='', addItem, isInCa
 
         {/* Información del Producto */}
         <div className="flex flex-col flex-1 text-center">
+          {/* Renderizado de Tags/Labels */}
+          <div className="flex flex-wrap gap-2 mb-3">
+            {labels && labels.map((label, index) => (
+              <span 
+                key={index}
+                className="text-[7px] uppercase tracking-widest text-[#a0a0a0] bg-[#faf9f6] px-2 py-1 rounded-md border border-[#eeeae3]"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
           <h3 className="text-lg font-serif text-[#2d3436] mb-1 line-clamp-2">{title}</h3>
           <p className="text-sm font-sans text-[#8c8c8c] mb-6 tracking-wide">{formattedPrice}</p>
           
@@ -67,7 +78,7 @@ const GiftCard = ({ title, img, price, orientation, cardType='', addItem, isInCa
                 : 'bg-[#2d3436] text-white hover:bg-[#4a4a4a] hover:shadow-lg active:scale-95 cursor-pointer'
             }`}
           >
-            {isInCart ? 'Seleccionado' : 'Añadir al Carrito'}
+            {isInCart ? 'Seleccionado' : 'Regalar'}
           </button>
         </div>
       </div>

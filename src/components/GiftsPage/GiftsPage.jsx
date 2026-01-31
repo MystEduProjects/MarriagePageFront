@@ -211,7 +211,8 @@ const GiftsPage = () => {
               key={object._id} 
               title={object.name} 
               img={object.img} 
-              price={object.price} 
+              price={object.price}
+              labels={object.labels} 
               orientation={'vertical'}
               addItem={() => addItem(object)}
               isInCart={!!cart[object._id]} 
