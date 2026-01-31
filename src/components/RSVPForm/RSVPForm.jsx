@@ -4,14 +4,14 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const RSVPForm = ({ onClose }) => {
   
-  const [guests, setGuests] = useState({});
+  const [guests, setGuests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isListOpen, setIsListOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
   
   const [formData, setFormData] = useState({
     attending: null,
-    menu: "Tradicional",
+    menu: "",
     allergies: "",
     plusOneName: ""
   });
@@ -56,6 +56,32 @@ const RSVPForm = ({ onClose }) => {
     setSearchTerm(guest.name); // Ponemos el nombre en el input
     setIsListOpen(false);
   };
+
+  const submitAttendance = async () => {
+    if (formData.attending === null) return alert("Por favor, indica si asistirás");
+
+    try {
+      const personId = selectedGuest._id;
+      const response = await fetch(`${API_URL}/people/${personId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attend: formData.attending,
+          menu: formData.menu || '-',
+          allergies: formData.allergies || '-',
+          escort: formData.plusOneName || '-',
+        })
+      });
+      if (response.ok) {
+        onClose(); // Cerramos el modal
+      } else {
+        alert("Hubo un error al confirmar. Inténtalo de nuevo.");
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     // Añadimos min-h para que el modal no "salte" y overflow-visible para que la lista no se corte
@@ -133,10 +159,11 @@ const RSVPForm = ({ onClose }) => {
                     className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm"
                     value={formData.menu}
                     onChange={(e) => setFormData({...formData, menu: e.target.value})}
+                    required
                   >
-                    <option>Menú Tradicional</option>
-                    <option>Menú Vegetariano</option>
-                    <option>Menú para Celíacos</option>
+                    <option value="" disabled>Seleccionar opción...</option>
+                    <option>Tradicional</option>
+                    <option>Vegetariano</option>
                   </select>
                 </div>
 
@@ -166,6 +193,7 @@ const RSVPForm = ({ onClose }) => {
 
             <button 
               className="w-full bg-[#2d3436] text-white py-5 rounded-full text-[11px] uppercase tracking-[0.3em] shadow-xl hover:bg-[#4a4a4a] hover:-translate-y-1 transition-all active:scale-95 mt-4"
+              onClick={submitAttendance}
             >
               Confirmar ahora
             </button>
