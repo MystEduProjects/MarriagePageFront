@@ -1,5 +1,5 @@
 
-const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem, isInCart=true, onDelete}) => {
+const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem, isInCart=true, isReserved=false, onDelete}) => {
   // Estilo común para los precios
   const formattedPrice = price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 
@@ -32,19 +32,32 @@ const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem
   if (orientation === 'vertical') {
     return (
       <div className={`flex flex-col h-full group bg-white p-4 rounded-2xl border transition-all duration-500 ${
-        isInCart ? 'border-[#eeeae3] opacity-80' : 'border-transparent hover:shadow-xl hover:shadow-[#00000005] hover:border-[#eeeae3]'
+        isReserved 
+          ? 'opacity-60 grayscale' 
+          : isInCart 
+            ? 'border-[#eeeae3] bg-[#faf9f6]' 
+            : 'border-transparent hover:shadow-xl hover:shadow-[#00000005] hover:border-[#eeeae3]'
       }`}>
-        
-        {/* Contenedor de Imagen con Zoom */}
+
+        {/* Contenedor de Imagen con Zoom y Badges */}
         <div className="relative aspect-square overflow-hidden rounded-xl bg-[#fdfcfb] mb-4">
           <img 
             src={img} 
             alt={title} 
             className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
-              !isInCart && 'group-hover:scale-110'
+              (!isInCart && !isReserved) && 'group-hover:scale-110'
             }`} 
           />
-          {isInCart && (
+          
+          {/* Badge: Ya Reservado (Prioridad) */}
+          {isReserved ? (
+            <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px] flex items-center justify-center">
+              <span className="bg-white/90 px-4 py-1 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-[#2d3436] shadow-sm">
+                No disponible
+              </span>
+            </div>
+          ) : isInCart && (
+            /* Badge: En el carrito */
             <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] flex items-center justify-center">
               <span className="bg-white/90 px-4 py-1 rounded-full text-[10px] uppercase tracking-[0.2em] font-sans shadow-sm">
                 En el carrito
@@ -56,7 +69,7 @@ const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem
         {/* Información del Producto */}
         <div className="flex flex-col flex-1 text-center">
           {/* Renderizado de Tags/Labels */}
-          <div className="flex flex-wrap gap-2 mb-3">
+          <div className="flex flex-wrap justify-center gap-2 mb-3">
             {labels && labels.map((label, index) => (
               <span 
                 key={index}
@@ -66,19 +79,23 @@ const GiftCard = ({ title, img, price, labels, orientation, cardType='', addItem
               </span>
             ))}
           </div>
-          <h3 className="text-lg font-serif text-[#2d3436] mb-1 line-clamp-2">{title}</h3>
+
+          <h3 className="text-lg font-serif text-[#2d3436] mb-1 line-clamp-2 italic">{title}</h3>
           <p className="text-sm font-sans text-[#8c8c8c] mb-6 tracking-wide">{formattedPrice}</p>
           
+          {/* Botón Único con Lógica de Estados */}
           <button 
             onClick={addItem}
-            disabled={isInCart}
+            disabled={isInCart || isReserved}
             className={`mt-auto w-full py-3 rounded-full text-[10px] uppercase tracking-[0.2em] transition-all duration-300 font-sans ${
-              isInCart 
-                ? 'bg-[#f2f0eb] text-[#a0a0a0] cursor-default' 
-                : 'bg-[#2d3436] text-white hover:bg-[#4a4a4a] hover:shadow-lg active:scale-95 cursor-pointer'
+              isReserved
+                ? 'bg-transparent border border-[#eeeae3] text-[#a0a0a0] cursor-not-allowed'
+                : isInCart 
+                  ? 'bg-[#f2f0eb] text-[#a0a0a0] cursor-default border border-[#eeeae3]' 
+                  : 'bg-[#2d3436] text-white hover:bg-[#4a4a4a] hover:shadow-lg active:scale-95 cursor-pointer'
             }`}
           >
-            {isInCart ? 'Seleccionado' : 'Regalar'}
+            {isReserved ? 'No disponible' : isInCart ? 'Seleccionado' : 'Regalar'}
           </button>
         </div>
       </div>

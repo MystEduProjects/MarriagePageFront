@@ -248,6 +248,7 @@ const GiftsPage = () => {
               orientation={'vertical'}
               addItem={() => addItem(object)}
               isInCart={!!cart[object._id]} 
+              isReserved={object.disabled}
             />
           ))}
         </section>

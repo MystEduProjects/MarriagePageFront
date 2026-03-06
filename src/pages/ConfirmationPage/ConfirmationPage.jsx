@@ -1,14 +1,49 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ConfirmationPage = () => {
-  
+  const [cartItems, setCartItems] = useState(null);
   // Opcional: Limpiar el carrito al llegar a esta página, 
   // ya que el proceso se completó con éxito.
   useEffect(() => {
+    // 1. Obtener los datos crudos
+    const rawCart = localStorage.getItem('cartGifts');
+    
+    if (rawCart) {
+      // 2. Parsear a objeto
+      const cartObj = JSON.parse(rawCart);
+      // 3. Convertir el objeto a un Array para poder iterar
+      const itemsArray = Object.values(cartObj);
+
+      // 4. Ejecutar la función pasando los datos que acabamos de obtener directamente
+      if (itemsArray.length > 0) {
+        finalizePurchase(itemsArray);
+      }
+    }
+
+    // 5. Limpiar el storage DESPUÉS de haber obtenido los datos
     localStorage.removeItem('cartGifts');
     localStorage.setItem('cartTotalPrice', '0');
   }, []);
+
+  const finalizePurchase = async (itemsInCart) => {
+    for (const item of itemsInCart) {
+      // Regla: menor a 60.000 o mayor a 1.000.000
+      if (item.price < 60000 || item.price > 1000000) {
+        try {
+          await fetch(`${API_URL}/gifts/${item._id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ disabled: true })
+          });
+        } catch (err) {
+          console.error("Error al deshabilitar regalo:", err);
+        }
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center p-6 text-[#4a4a4a] font-serif relative overflow-hidden">
