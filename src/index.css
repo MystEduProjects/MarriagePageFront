@@ -18,3 +18,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
+@keyframes shrink-width {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

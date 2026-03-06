@@ -8,12 +8,14 @@ const RSVPForm = ({ onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isListOpen, setIsListOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   const [formData, setFormData] = useState({
     attending: null,
     menu: "",
     allergies: "",
-    plusOneName: ""
+    plusOneName: "",
+    wantsEscort: null
   });
 
 
@@ -47,7 +49,10 @@ const RSVPForm = ({ onClose }) => {
     const termNormalized = normalize(searchTerm);
   
     return guests.filter(g => 
-      normalize(g.name).includes(termNormalized)
+      // Condición 1: Que el nombre coincida
+      normalize(g.name).includes(termNormalized) && 
+      // Condición 2: Que NO haya respondido aún
+      (g.attend === null || g.attend === undefined)
     );
   }, [searchTerm, guests]);
 
@@ -59,6 +64,11 @@ const RSVPForm = ({ onClose }) => {
 
   const submitAttendance = async () => {
     if (formData.attending === null) return alert("Por favor, indica si asistirás");
+    
+    // Validación extra: si dijo que quiere acompañante pero no puso el nombre
+    if (formData.wantsEscort && !formData.plusOneName.trim()) {
+      return alert("Por favor, ingresa el nombre de tu acompañante");
+    }
 
     try {
       const personId = selectedGuest._id;
@@ -70,10 +80,17 @@ const RSVPForm = ({ onClose }) => {
           menu: formData.menu || '-',
           allergies: formData.allergies || '-',
           escort: formData.plusOneName || '-',
+          wantsEscort: formData.wantsEscort,
         })
       });
       if (response.ok) {
-        onClose(); // Cerramos el modal
+        // En lugar de onClose(), mostramos el éxito
+        setIsSubmitted(true);
+        
+        // Opcional: Cerrar automáticamente tras 3.5 segundos
+        setTimeout(() => {
+          onClose();
+        }, 3500);
       } else {
         alert("Hubo un error al confirmar. Inténtalo de nuevo.");
       }
@@ -87,119 +104,192 @@ const RSVPForm = ({ onClose }) => {
     // Añadimos min-h para que el modal no "salte" y overflow-visible para que la lista no se corte
     <div className="flex flex-col min-h-[400px] w-full max-w-lg mx-auto overflow-visible relative">
       
-      <div className="text-center mb-8">
-        <h2 className="text-3xl italic text-[#2d3436]">Confirmar Asistencia</h2>
-      </div>
-
-      <div className="flex-1 space-y-8 font-sans">
-        
-        {/* BUSCADOR DE NOMBRES - CONTENEDOR PRIORITARIO */}
-        <div className="relative z-[60]"> {/* Z-index muy alto para la lista */}
-          <label className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] block mb-2">Busca tu nombre en la lista</label>
-          <div className="relative">
-            <input 
-              type="text"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setIsListOpen(true);
-                if (selectedGuest) setSelectedGuest(null);
-              }}
-              onFocus={() => setIsListOpen(true)}
-              placeholder="Escribe aquí..."
-              className="w-full bg-white border border-[#eeeae3] rounded-xl py-4 px-5 focus:outline-none focus:border-[#2d3436] focus:ring-1 focus:ring-[#2d3436] transition-all font-serif text-lg italic shadow-sm"
-            />
-            
-            {/* LISTA DE RESULTADOS FLOTANTE */}
-            {isListOpen && searchTerm.length > 0 && (
-              <ul className="absolute left-0 right-0 top-[110%] bg-white border border-[#eeeae3] rounded-2xl shadow-2xl max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-300 z-[70]">
-                {filteredGuests.length > 0 ? (
-                  filteredGuests.map(guest => (
-                    <li 
-                      key={guest._id}
-                      onClick={() => handleSelect(guest)}
-                      className="px-6 py-4 hover:bg-[#faf9f6] cursor-pointer text-sm text-[#4a4a4a] border-b border-[#faf9f6] last:border-none transition-colors flex items-center justify-between group"
-                    >
-                      <span>{guest.name}</span>
-                      <span className="text-[10px] opacity-0 group-hover:opacity-100 uppercase tracking-widest text-[#a0a0a0]">Seleccionar</span>
-                    </li>
-                  ))
-                ) : (
-                  <li className="px-6 py-4 text-xs text-[#a0a0a0] italic">No encontramos ese nombre en la lista...</li>
-                )}
-              </ul>
-            )}
+      {isSubmitted ? (
+      // VISTA DE ÉXITO
+      <div className="text-center animate-in zoom-in-95 duration-500 space-y-6">
+        <div className="flex justify-center">
+          <div className="w-20 h-20 bg-[#2d3436] rounded-full flex items-center justify-center shadow-xl">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
           </div>
         </div>
+        
+        <div className="space-y-2">
+          <h2 className="text-3xl italic text-[#2d3436]">¡Muchas gracias!</h2>
+          <p className="text-sm font-sans text-[#a0a0a0] tracking-wide">
+            Tu respuesta ha sido registrada con éxito.
+          </p>
+        </div>
 
-        {/* RESTO DEL FORMULARIO - APARECE SOLO CUANDO HAY SELECCIÓN */}
-        {selectedGuest && (
-          <div className="animate-in fade-in zoom-in-95 duration-500 space-y-8 pb-4">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-[#d1d1d1] pt-4">
+          Nos vemos el 13 de Diciembre
+        </p>
 
-            {/* BOTONES DE ASISTENCIA */}
-            <div className="grid grid-cols-2 gap-4">
-              <button 
-                type="button"
-                onClick={() => setFormData({...formData, attending: true})}
-                className={`py-4 rounded-xl border text-[10px] uppercase tracking-[0.2em] transition-all font-semibold ${formData.attending === true ? 'bg-[#2d3436] text-white shadow-lg border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0] hover:border-[#2d3436]'}`}
-              > Sí, estaré ahí </button>
-              <button 
-                type="button"
-                onClick={() => setFormData({...formData, attending: false})}
-                className={`py-4 rounded-xl border text-[10px] uppercase tracking-[0.2em] transition-all font-semibold ${formData.attending === false ? 'bg-[#2d3436] text-white shadow-lg border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0] hover:border-[#2d3436]'}`}
-              > No podré ir </button>
-            </div>
+        {/* BARRA DE PROGRESO (TIMER) */}
+      <div className="w-48 mx-auto h-[2px] bg-[#eeeae3] mt-8 overflow-hidden rounded-full relative">
+        <div 
+          className="absolute top-0 left-0 h-full bg-[#2d3436] transition-all ease-linear"
+          style={{ 
+            animation: 'shrink-width 3.5s linear forwards' 
+          }}
+        />
+      </div>
+        
+        <button 
+          onClick={onClose}
+          className="text-[10px] uppercase tracking-widest text-[#2d3436] border-b border-[#2d3436] pb-1 hover:text-[#a0a0a0] hover:border-[#a0a0a0] transition-all"
+        >
+          Cerrar ventana
+        </button>
+      </div>
+    ) : (
+        <>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl italic text-[#2d3436]">Confirmar Asistencia</h2>
+          </div>
 
-            {/* DETALLES CONDICIONALES */}
-            {formData.attending && (
-              <div className="space-y-6 pt-6 border-t border-[#eeeae3] animate-in slide-in-from-bottom-4 duration-500">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Preferencia de Menú</label>
-                  <select 
-                    className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm"
-                    value={formData.menu}
-                    onChange={(e) => setFormData({...formData, menu: e.target.value})}
-                    required
-                  >
-                    <option value="" disabled>Seleccionar opción...</option>
-                    <option>Tradicional</option>
-                    <option>Vegetariano</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Alergias / Restricciones</label>
-                  <input 
-                    type="text"
-                    className="bg-transparent border-b border-[#eeeae3] py-2 focus:outline-none text-sm italic"
-                    placeholder="Ninguna..."
-                    onChange={(e) => setFormData({...formData, allergies: e.target.value})}
-                  />
-                </div>
-
-                {selectedGuest.availableEscort && (
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Nombre de tu acompañante</label>
-                    <input 
-                      type="text"
-                      className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm italic"
-                      placeholder="Nombre y Apellido"
-                      onChange={(e) => setFormData({...formData, plusOneName: e.target.value})}
-                    />
-                  </div>
+          <div className="flex-1 space-y-8 font-sans">
+            
+            {/* BUSCADOR DE NOMBRES - CONTENEDOR PRIORITARIO */}
+            <div className="relative z-[60]"> {/* Z-index muy alto para la lista */}
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] block mb-2">Busca tu nombre en la lista</label>
+              <div className="relative">
+                <input 
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setIsListOpen(true);
+                    if (selectedGuest) setSelectedGuest(null);
+                  }}
+                  onFocus={() => setIsListOpen(true)}
+                  placeholder="Escribe aquí..."
+                  className="w-full bg-white border border-[#eeeae3] rounded-xl py-4 px-5 focus:outline-none focus:border-[#2d3436] focus:ring-1 focus:ring-[#2d3436] transition-all font-serif text-lg italic shadow-sm"
+                />
+                
+                {/* LISTA DE RESULTADOS FLOTANTE */}
+                {isListOpen && searchTerm.length > 0 && (
+                  <ul className="absolute left-0 right-0 top-[110%] bg-white border border-[#eeeae3] rounded-2xl shadow-2xl max-h-[250px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-300 z-[70]">
+                    {filteredGuests.length > 0 ? (
+                      filteredGuests.map(guest => (
+                        <li 
+                          key={guest._id}
+                          onClick={() => handleSelect(guest)}
+                          className="px-6 py-4 hover:bg-[#faf9f6] cursor-pointer text-sm text-[#4a4a4a] border-b border-[#faf9f6] last:border-none transition-colors flex items-center justify-between group"
+                        >
+                          <span>{guest.name}</span>
+                          <span className="text-[10px] opacity-0 group-hover:opacity-100 uppercase tracking-widest text-[#a0a0a0]">Seleccionar</span>
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-6 py-4 text-xs text-[#a0a0a0] italic">
+                        {searchTerm.length >= 2 
+                        ? "No encontramos ese nombre o ya ha sido confirmado." 
+                        : "Escribe al menos 2 letras..."}
+                      </li>
+                    )}
+                  </ul>
                 )}
               </div>
-            )}
+            </div>
 
-            <button 
-              className="w-full bg-[#2d3436] text-white py-5 rounded-full text-[11px] uppercase tracking-[0.3em] shadow-xl hover:bg-[#4a4a4a] hover:-translate-y-1 transition-all active:scale-95 mt-4"
-              onClick={submitAttendance}
-            >
-              Confirmar ahora
-            </button>
+            {/* RESTO DEL FORMULARIO - APARECE SOLO CUANDO HAY SELECCIÓN */}
+            {selectedGuest && (
+              <div className="animate-in fade-in zoom-in-95 duration-500 space-y-8 pb-4">
+
+                {/* BOTONES DE ASISTENCIA */}
+                <div className="grid grid-cols-2 gap-4">
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, attending: true})}
+                    className={`py-4 rounded-xl border text-[10px] uppercase tracking-[0.2em] transition-all font-semibold ${formData.attending === true ? 'bg-[#2d3436] text-white shadow-lg border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0] hover:border-[#2d3436]'}`}
+                  > Sí, estaré ahí </button>
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, attending: false})}
+                    className={`py-4 rounded-xl border text-[10px] uppercase tracking-[0.2em] transition-all font-semibold ${formData.attending === false ? 'bg-[#2d3436] text-white shadow-lg border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0] hover:border-[#2d3436]'}`}
+                  > No podré ir </button>
+                </div>
+
+                {/* DETALLES CONDICIONALES */}
+                {formData.attending && (
+                  <div className="space-y-6 pt-6 border-t border-[#eeeae3] animate-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Preferencia de Menú</label>
+                      <select 
+                        className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm"
+                        value={formData.menu}
+                        onChange={(e) => setFormData({...formData, menu: e.target.value})}
+                        required
+                      >
+                        <option value="" disabled>Seleccionar opción...</option>
+                        <option>Tradicional</option>
+                        <option>Vegetariano</option>
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Alergias / Restricciones</label>
+                      <input 
+                        type="text"
+                        className="bg-transparent border-b border-[#eeeae3] py-2 focus:outline-none text-sm italic"
+                        placeholder="Ninguna..."
+                        onChange={(e) => setFormData({...formData, allergies: e.target.value})}
+                      />
+                    </div>
+
+                    {selectedGuest.availableEscort && (
+                      <div className="space-y-4 pt-4 border-t border-[#eeeae3]/50 animate-in fade-in duration-500">
+                      <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0] block">
+                        ¿Asistirás con un acompañante?
+                      </label>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        <button 
+                          type="button"
+                          onClick={() => setFormData({...formData, wantsEscort: true})}
+                          className={`py-3 rounded-xl border text-[9px] uppercase tracking-widest transition-all ${formData.wantsEscort === true ? 'bg-[#2d3436] text-white border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0]'}`}
+                        > Sí </button>
+                        
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            setFormData({...formData, wantsEscort: false, plusOneName: ""});
+                          }}
+                          className={`py-3 rounded-xl border text-[9px] uppercase tracking-widest transition-all ${formData.wantsEscort === false ? 'bg-[#2d3436] text-white border-[#2d3436]' : 'bg-white border-[#eeeae3] text-[#a0a0a0]'}`}
+                        > No </button>
+                      </div>
+                  
+                      {/* Input desplegable si la respuesta es SÍ */}
+                      {formData.wantsEscort && (
+                        <div className="flex flex-col gap-2 animate-in slide-in-from-top-2 duration-300">
+                          <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Nombre de tu acompañante</label>
+                          <input 
+                            type="text"
+                            value={formData.plusOneName}
+                            className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm italic"
+                            placeholder="Nombre y Apellido"
+                            onChange={(e) => setFormData({...formData, plusOneName: e.target.value})}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    )}
+                  </div>
+                )}
+
+                <button 
+                  className="w-full bg-[#2d3436] text-white py-5 rounded-full text-[11px] uppercase tracking-[0.3em] shadow-xl hover:bg-[#4a4a4a] hover:-translate-y-1 transition-all active:scale-95 mt-4"
+                  onClick={submitAttendance}
+                >
+                  Confirmar ahora
+                </button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      ) }
     </div>
   );
 };
