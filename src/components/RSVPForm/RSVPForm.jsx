@@ -123,7 +123,7 @@ const RSVPForm = ({ onClose }) => {
         </div>
 
         <p className="text-[10px] uppercase tracking-[0.2em] text-[#d1d1d1] pt-4">
-          Nos vemos el 13 de Diciembre
+          Nos vemos el 5 de Diciembre
         </p>
 
         {/* BARRA DE PROGRESO (TIMER) */}
