@@ -20,7 +20,7 @@ const Modal = ({ content, classType, onClose }) => {
         </button>
 
         {/* Contenido del Modal */}
-        <div className="h-full overflow-y-auto p-8 md:p-10 font-serif">
+        <div className="h-full max-h-[95vh] overflow-y-auto px-8 py-2 md:px-10 md:py-4 font-serif">
           {content}
         </div>
       </div>

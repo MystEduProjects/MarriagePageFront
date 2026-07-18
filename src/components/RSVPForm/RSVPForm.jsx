@@ -102,7 +102,7 @@ const RSVPForm = ({ onClose }) => {
 
   return (
     // Añadimos min-h para que el modal no "salte" y overflow-visible para que la lista no se corte
-    <div className="flex flex-col min-h-[400px] w-full max-w-lg mx-auto overflow-visible relative">
+    <div className="flex flex-col min-h-[400px] h-full w-full max-w-lg mx-auto overflow-visible relative">
       
       {isSubmitted ? (
       // VISTA DE ÉXITO
