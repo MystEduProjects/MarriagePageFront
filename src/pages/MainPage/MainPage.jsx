@@ -2,6 +2,8 @@ import { useState } from "react";
 import Modal from "../../components/Modal/Modal";
 import RSVPForm from "../../components/RSVPForm/RSVPForm";
 import { Clip } from "../../components/Clip";
+import { Link } from "react-router-dom";
+import { Gift } from 'lucide-react';
 
 const MainPage = () => {
   const [isRSVPOpen, setIsRSVPOpen] = useState(false);
@@ -93,18 +95,18 @@ const MainPage = () => {
         {/* Columna 2: Dresscode */}
         {/* <div className="bg-[#f3f2ee] p-10 md:p-16 rounded-[3rem] shadow-sm border border-[#eeeae3] flex flex-col justify-center"> */}
         <div 
-          className=" px-10 py-6 md:p-16 rounded-[3rem] shadow-sm border border-[#eeeae3] flex flex-col justify-center
+          className=" px-10 py-6 md:p-16 rounded-[3rem] shadow-sm border border-[#eeeae3] flex flex-col justify-center relative overflow-hidden
             md:p-10
           "
         >
           <h2 
-            className="text-2xl italic mb-2 text-center text-[#2d3436]
+            className="text-2xl italic mb-2 text-center text-[#2d3436] z-2
               md:mb-6 md:text-4xl
             "
           >Dresscode</h2>
           
           <div 
-            className="space-y-2 mb-6 text-center
+            className="space-y-2 mb-6 text-center z-2
               md:mb-12
             "
           >
@@ -117,7 +119,7 @@ const MainPage = () => {
           
           <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
             {/* Hombres */}
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-6 z-2">
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] font-sans">Prohibidos</p>
               <div className="grid grid-cols-2 gap-y-8 justify-items-center">
                 <div className="flex flex-col items-center gap-3">
@@ -131,12 +133,17 @@ const MainPage = () => {
               </div>
             </div>
 
-            <div className="row-span-2 md:row-span-1 flex items-center justify-center">
+            <div 
+              className="absolute inset-0 z-0 w-full h-full
+                md:row-span-1 md:flex md:items-center md:justify-center
+              "
+            >
               <Clip />
+              <div className="md:hidden absolute inset-0 bg-[#fffed8]/80"></div>
             </div>
 
             {/* Mujeres */}
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-6 z-2">
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] font-sans">Evitar</p>
               <div className="grid grid-cols-2 gap-y-8 justify-items-center">
                 <div className="flex flex-col items-center gap-3">
@@ -161,14 +168,21 @@ const MainPage = () => {
         </div>
       </section>
 
-      {/* BOTÓN CONFIRMACIÓN (RSVP) */}
-      <section className="py-12 text-center">
+      {/* BOTONES */}
+      <section className="py-12 text-center grid grid-cols-1 px-4 gap-4">
         <button 
           onClick={() => setIsRSVPOpen(true)}
           className="bg-[#2d3436] text-white px-12 py-5 rounded-full font-sans text-xs uppercase tracking-[0.3em] shadow-xl hover:scale-105 transition-all cursor-pointer"
         >
           Confirmar Asistencia
         </button>
+        <Link
+          to={'https://club.noviosparis.cl/home/couple-catalog/21056537'}
+          target="_blank" rel="noopener noreferrer"
+          className="border-b border-[#eeeae3] py-4 text-lg flex justify-center items-center gap-2"
+        >
+          <Gift />
+          Haz click aquí para ver la lista de regalos</Link>
       </section>
 
       {/* MODAL DE RSVP */}
