@@ -3,12 +3,12 @@ import Modal from "../../components/Modal/Modal";
 import RSVPForm from "../../components/RSVPForm/RSVPForm";
 import { Clip } from "../../components/Clip";
 import { Link } from "react-router-dom";
-import { Gift } from 'lucide-react';
+import { Gift, SquareArrowOutUpRight } from 'lucide-react';
 
 const MainPage = () => {
   const [isRSVPOpen, setIsRSVPOpen] = useState(false);
 
-  const titleTextClass = `text-xl italic font-bold
+  const titleTextClass = `text-2xl italic font-bold
     md:text-4xl
   `
 
@@ -56,10 +56,10 @@ const MainPage = () => {
           </section>
           
           {/* Ceremonia */}
-          <div className="group space-y-4 grid grid-cols-1 md:grid-cols-2 items-end w-full">
+          <div className="group space-y-4 grid grid-cols-1 md:grid-cols-2 items-end w-full justify-items-center">
             <div className="m-0 grid justify-center">
-              <p className="text-3xl">Casona Lampa</p>
-              <p className="text-sm font-sans text-[#8c8c8c]">Juan de Dios Marticorena, Parcela 3, Lampa.</p>
+              <p className="text-2xl md:text-3xl">Casona Lampa</p>
+              <p className="text-xs md:text-sm font-sans text-[#8c8c8c]">Juan de Dios Marticorena, Parcela 3, Lampa.</p>
               <img 
                 src="test1.jpeg" 
                 alt="" 
@@ -67,7 +67,15 @@ const MainPage = () => {
               />
             </div>
             
-            <div className="h-56 w-full md:grid justify-center flex">
+            <div className="h-56 w-full md:w-md md:grid justify-center flex relative">
+              <a
+                href="https://waze.com/ul?ll=-33.271115585542276,-70.88191252285762&navigate=yes"
+                target="_blank" rel="noopener noreferrer"
+                className="absolute top-2 right-2 z-2 h-min w-fit shrink-0 bg-white shadow-md rounded-xs py-2 px-4 font-[Roboto,Arial,sans-serif] text-sm font-[500] text-[#1a73e8] flex items-center gap-1 grayscale hover:grayscale-0 transition-all duration-700"
+              >
+                Open in Waze
+                <SquareArrowOutUpRight className="w-4 h-4" />
+              </a>
               <iframe
                 title="Mapa Ceremonia"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.858997885558!2d-70.88191252285762!3d-33.271115585542276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96629591c23ad08b%3A0x5267c0f9e3b90989!2sCasona%20Lampa!5e0!3m2!1sen!2scl!4v1772806077487!5m2!1sen!2scl"
@@ -78,7 +86,8 @@ const MainPage = () => {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="flex-1 w-full md:w-md overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 shadow-md border border-[#eeeae3]"
-              ></iframe>
+              >
+              </iframe>
             </div>
           </div>
         </div>
@@ -93,7 +102,6 @@ const MainPage = () => {
       >
 
         {/* Columna 2: Dresscode */}
-        {/* <div className="bg-[#f3f2ee] p-10 md:p-16 rounded-[3rem] shadow-sm border border-[#eeeae3] flex flex-col justify-center"> */}
         <div 
           className=" px-10 py-6 md:p-16 rounded-[3rem] shadow-sm border border-[#eeeae3] flex flex-col justify-center relative overflow-hidden
             md:p-10
@@ -120,7 +128,7 @@ const MainPage = () => {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
             {/* Hombres */}
             <div className="text-center space-y-6 z-2">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] font-sans">Prohibidos</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-black font-bold font-sans">Prohibidos</p>
               <div className="grid grid-cols-2 gap-y-8 justify-items-center">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white border border-[#d1cfc7] shadow-sm" title="Blanco"></div>
@@ -135,7 +143,7 @@ const MainPage = () => {
 
             <div 
               className="absolute inset-0 z-0 w-full h-full
-                md:row-span-1 md:flex md:items-center md:justify-center
+                md:row-span-1 md:flex md:items-center md:justify-center md:static
               "
             >
               <Clip />
@@ -144,7 +152,7 @@ const MainPage = () => {
 
             {/* Mujeres */}
             <div className="text-center space-y-6 z-2">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#a0a0a0] font-sans">Evitar</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-black font-bold font-sans">Evitar</p>
               <div className="grid grid-cols-2 gap-y-8 justify-items-center">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white border border-[#d1cfc7] shadow-sm"></div>
@@ -169,20 +177,28 @@ const MainPage = () => {
       </section>
 
       {/* BOTONES */}
-      <section className="py-12 text-center grid grid-cols-1 px-4 gap-4">
+      <section 
+        className="py-12 text-center grid grid-cols-1 px-4 gap-4 max-w-7xl mx-auto
+          md:gap-8
+        "
+      >
+        <Link
+          to={'https://club.noviosparis.cl/home/couple-catalog/21056537'}
+          target="_blank" rel="noopener noreferrer"
+          className="border border-[#eeeae3] py-4 px-4 text-lg flex justify-center items-center gap-2 shadow-md
+            hover:border-[#84498d] hover:text-[#84498d] hover:text-xl
+            transition-all ease-in-out
+          "
+        >
+          <Gift />
+          Haz click aquí para ver la lista de regalos
+        </Link>
         <button 
           onClick={() => setIsRSVPOpen(true)}
           className="bg-[#2d3436] text-white px-12 py-5 rounded-full font-sans text-xs uppercase tracking-[0.3em] shadow-xl hover:scale-105 transition-all cursor-pointer"
         >
           Confirmar Asistencia
         </button>
-        <Link
-          to={'https://club.noviosparis.cl/home/couple-catalog/21056537'}
-          target="_blank" rel="noopener noreferrer"
-          className="border-b border-[#eeeae3] py-4 text-lg flex justify-center items-center gap-2"
-        >
-          <Gift />
-          Haz click aquí para ver la lista de regalos</Link>
       </section>
 
       {/* MODAL DE RSVP */}
