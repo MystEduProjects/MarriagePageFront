@@ -65,24 +65,18 @@ const CustomCarousel = () => {
   }, [isAutoPlay]);
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 w-full h-full">
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        onMouseDown={() => setIsAutoPlay(false)}
-        onMouseUp={() => setIsAutoPlay(true)}
-        onTouchStart={() => setIsAutoPlay(false)}
-        onTouchEnd={() => setIsAutoPlay(true)}
-        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
-        style={{ height: ITEM_HEIGHT, flexGrow: 0 }}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none w-full h-full"
       >
         {data.map((item, index) => (
-          <div key={`list_item${index}`} className="snap-start shrink-0 w-full">
+          <div key={`list_item${index}`} className="snap-start shrink-0 w-full h-full">
             <RenderItem item={item} index={index} scrollX={scrollX} itemWidth={itemWidth} />
           </div>
         ))}
       </div>
-      <Pagination paginationIndex={paginationIndex} />
     </div>
   );
 };

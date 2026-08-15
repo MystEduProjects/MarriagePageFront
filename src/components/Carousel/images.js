@@ -1,5 +1,5 @@
 export const images = [
-  { text: 'default', image: 'default-image.webp' },
-  { text: 'first', image: 'image4.jpeg' },
-  { text: 'second', image: 'image2.jpeg' },
+  { text: '', image: 'image4.jpeg' },
+  { text: '', image: 'image2.jpeg' },
+  { text: '', image: 'test1.jpeg' },
 ]

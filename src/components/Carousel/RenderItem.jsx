@@ -18,16 +18,14 @@ const RenderItem = ({ item, index, scrollX = 0, itemWidth = 0 }) => {
   const opacity = Math.max(0, opacityRaw);
 
   return (
-    <div style={{ width: itemWidth || "100%" }}>
+    <div className="w-full h-full">
       <img
         src={item.image}
-        alt={item.name ?? ""}
+        alt=""
         style={{
-          width: `calc(100% - ${HORIZONTAL_PADDING}px)`,
-          height: ITEM_HEIGHT,
           opacity,
         }}
-        className="object-cover mx-auto rounded-2xl transition-opacity duration-100"
+        className="object-cover object-top transition-opacity duration-100 w-full h-full"
       />
     </div>
   );

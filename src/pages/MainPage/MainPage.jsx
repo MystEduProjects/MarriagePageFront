@@ -22,12 +22,7 @@ const MainPage = () => {
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         {/* Imagen de fondo con overlay suave */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src="image4.jpeg" 
-            alt="Pareja" 
-            className="w-full h-full object-cover object-top animate-slow-zoom"
-          />
-          {/* <CustomCarousel /> */}
+          <CustomCarousel />
           <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
         </div>
 
