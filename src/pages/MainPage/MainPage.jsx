@@ -7,6 +7,7 @@ import { Gift, SquareArrowOutUpRight } from 'lucide-react';
 import { ColorBadge } from "../../components/color-badge";
 import { DresscodeBadgesColumn } from "../../components/dresscode-badges-column";
 import CustomCarousel from "../../components/Carousel/CustomCarousel";
+import { TextSection } from "../../components/text-section";
 
 const MainPage = () => {
   const [isRSVPOpen, setIsRSVPOpen] = useState(false);
@@ -20,7 +21,6 @@ const MainPage = () => {
       
       {/* SECCIÓN 1: HERO - Presentación */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Imagen de fondo con overlay suave */}
         <div className="absolute inset-0 z-0">
           <CustomCarousel />
           <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
@@ -35,6 +35,8 @@ const MainPage = () => {
         </div>
       </section>
 
+      <TextSection />
+
       {/* SECCIÓN 2: INFORMACIÓN DETALLADA */}
       <section 
         className="mx-auto px-4 py-8 grid grid-cols-1 w-full
@@ -42,7 +44,6 @@ const MainPage = () => {
         "
       >
         
-        {/* Columna 1: Ubicaciones */}
         <div className="space-y-12 w-full">
           <section 
             className="flex flex-col items-center mb-8 border-b border-[#eeeae3] pb-4
@@ -91,8 +92,6 @@ const MainPage = () => {
           </div>
         </div>
       </section>
-
-      <p className="text-lg text-[#8c8c8c] text-center">Con mucha alegria te invitamos a celebrar nuestro matrimonio.</p>
       
       <section 
         className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1
@@ -140,7 +139,7 @@ const MainPage = () => {
               "
             >
               <Clip />
-              <div className="md:hidden absolute inset-0 bg-[#fffed8]/80"></div>
+              <div className="md:hidden absolute inset-0 bg-[#ffffed]/80"></div>
             </div>
 
             <DresscodeBadgesColumn 
