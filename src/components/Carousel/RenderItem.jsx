@@ -1,32 +1,34 @@
 import React from "react";
 import { interpolate } from "./interpolate";
 
-const ITEM_HEIGHT = 194; // equivalente a hpx(194)
-const HORIZONTAL_PADDING = 32; // equivalente a wpx(32)
+const MOBILE_BREAKPOINT = 768; // debe coincidir con el "md:" de Tailwind
 
-// scrollX e itemWidth vienen de CustomCarousel: reemplazan al shared value `x`
-// que en RN se compartía entre todos los items vía Reanimated.
 const RenderItem = ({ item, index, scrollX = 0, itemWidth = 0 }) => {
   const opacityRaw = interpolate(
     scrollX,
     [(index - 1) * itemWidth, index * itemWidth, (index + 1) * itemWidth],
     [-0.3, 1, -0.3]
   );
-
-  // CSS no acepta opacity negativa (a diferencia de RN, donde interpolate
-  // igual devuelve -0.3 sin romper nada); la clampeamos en 0.
   const opacity = Math.max(0, opacityRaw);
 
   return (
     <div className="w-full h-full">
-      <img
-        src={item.image}
-        alt=""
-        style={{
-          opacity,
-        }}
-        className="object-cover object-top transition-opacity duration-100 w-full h-full"
-      />
+      <picture>
+        {/* El navegador evalúa los <source> de arriba hacia abajo y descarga
+            SOLO el primero que matchea: nunca pide las dos imágenes. */}
+        <source
+          media={`(min-width: ${MOBILE_BREAKPOINT}px)`}
+          srcSet={item.desktopImage}
+        />
+        <img
+          src={item.mobileImage}
+          alt=""
+          style={{
+            opacity,
+          }}
+          className="w-full h-full object-cover mx-auto transition-opacity duration-100"
+        />
+      </picture>
     </div>
   );
 };
