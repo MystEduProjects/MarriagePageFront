@@ -16,7 +16,7 @@ const MainPage = () => {
   `
 
   return (
-    <div className="bg-[#fffed8] text-[#4a4a4a] font-serif w-full">
+    <div className="bg-[#ffffed] text-[#4a4a4a] font-serif w-full">
       
       {/* SECCIÓN 1: HERO - Presentación */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
@@ -124,16 +124,10 @@ const MainPage = () => {
             >Formal / Gala</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-12">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
             <DresscodeBadgesColumn 
               title={"Prohibidos"} 
               colors={[
-                { text: "", color: "#DBE2E9" },
-                { text: "", color: "#D8C8D1 " },
-                { text: "", color: "#ECC3B2 " },
-                { text: "", color: "#A2E4B8 " },
-                { text: "", color: "#EBE49A " },
-                { text: "", color: "#D9E1E2" },
                 { text: "Blanco", color: "#FFFFFF " },
                 { text: "Crema", color: "#FDFBD4 " },
                 { text: "Marfil", color: "#F0DFCC" },
@@ -148,6 +142,19 @@ const MainPage = () => {
               <Clip />
               <div className="md:hidden absolute inset-0 bg-[#fffed8]/80"></div>
             </div>
+
+            <DresscodeBadgesColumn 
+              title={"Prohibidos"} 
+              subtitle="Colores Pastel"
+              colors={[
+                { text: "Amarillo Patito", color: "#FEF6B4" },
+                { text: "Rosa Palo", color: "#E8C5C8 " },
+                { text: "Azul Cielo", color: "#CEE5F2" },
+                { text: "Verde Menta", color: "#E3F9F1" },
+                { text: "Lila Claro", color: "#E6D8ED" },
+                { text: "Gris Claro", color: "#E0E0E0" },
+              ]}
+            />
           </div>
         </div>
       </section>
