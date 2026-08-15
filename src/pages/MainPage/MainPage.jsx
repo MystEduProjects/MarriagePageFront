@@ -160,7 +160,7 @@ const MainPage = () => {
 
       {/* BOTONES */}
       <section 
-        className="py-12 text-center grid grid-cols-1 px-4 gap-4 max-w-7xl mx-auto
+        className="pt-0 pb-12 text-center grid grid-cols-1 px-4 gap-4 max-w-7xl mx-auto
           md:gap-8
         "
       >
