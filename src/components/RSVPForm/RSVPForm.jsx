@@ -15,7 +15,9 @@ const RSVPForm = ({ onClose }) => {
     menu: "",
     allergies: "",
     plusOneName: "",
-    wantsEscort: null
+    wantsEscort: null,
+    escortAllergies: "",
+    escortMenu: ""
   });
 
 
@@ -81,6 +83,8 @@ const RSVPForm = ({ onClose }) => {
           allergies: formData.allergies || '-',
           escort: formData.plusOneName || '-',
           wantsEscort: formData.wantsEscort,
+          escortAllergies: formData.escortAllergies || '-',
+          escortMenu: formData.escortMenu || '-'
         })
       });
       if (response.ok) {
@@ -233,8 +237,8 @@ const RSVPForm = ({ onClose }) => {
                       <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Alergias / Restricciones</label>
                       <input 
                         type="text"
-                        className="bg-transparent border-b border-[#eeeae3] py-2 focus:outline-none text-sm italic"
-                        placeholder="Ninguna..."
+                        className="bg-white/80 border-b border-[#eeeae3] py-2 px-2 focus:outline-none text-sm italic"
+                        placeholder="-"
                         onChange={(e) => setFormData({...formData, allergies: e.target.value})}
                       />
                     </div>
@@ -264,14 +268,40 @@ const RSVPForm = ({ onClose }) => {
                       {/* Input desplegable si la respuesta es SÍ */}
                       {formData.wantsEscort && (
                         <div className="flex flex-col gap-2 animate-in slide-in-from-top-2 duration-300">
-                          <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Nombre de tu acompañante</label>
-                          <input 
-                            type="text"
-                            value={formData.plusOneName}
-                            className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm italic"
-                            placeholder="Nombre y Apellido"
-                            onChange={(e) => setFormData({...formData, plusOneName: e.target.value})}
-                          />
+                          <div>
+                            <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Nombre de tu acompañante</label>
+                            <input 
+                              type="text"
+                              value={formData.plusOneName}
+                              className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm italic"
+                              placeholder="Nombre y Apellido"
+                              onChange={(e) => setFormData({...formData, plusOneName: e.target.value})}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Menu de acompañante</label>
+                            <select 
+                              className="w-full bg-white border border-[#eeeae3] rounded-xl py-3 px-4 focus:outline-none focus:border-[#2d3436] text-sm"
+                              value={formData.escortMenu}
+                              onChange={(e) => setFormData({...formData, escortMenu: e.target.value})}
+                              required
+                            >
+                              <option value="" disabled>Seleccionar opción...</option>
+                              <option>Tradicional</option>
+                              <option>Vegetariano</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] uppercase tracking-widest text-[#a0a0a0]">Alergias / Restricciones de acompañante</label>
+                            <input 
+                              type="text"
+                              className="bg-white/80 border-b border-[#eeeae3] py-2 px-2 focus:outline-none text-sm italic"
+                              placeholder="-"
+                              onChange={(e) => setFormData({...formData, escortAllergies: e.target.value})}
+                            />
+                          </div>
                         </div>
                       )}
                     </div>
@@ -283,7 +313,7 @@ const RSVPForm = ({ onClose }) => {
                   className="w-full bg-[#2d3436] text-white py-5 rounded-full text-[11px] uppercase tracking-[0.3em] shadow-xl hover:bg-[#4a4a4a] hover:-translate-y-1 transition-all active:scale-95 mt-4"
                   onClick={submitAttendance}
                 >
-                  Confirmar ahora
+                  Confirmar
                 </button>
               </div>
             )}

@@ -4,6 +4,9 @@ import RSVPForm from "../../components/RSVPForm/RSVPForm";
 import { Clip } from "../../components/Clip";
 import { Link } from "react-router-dom";
 import { Gift, SquareArrowOutUpRight } from 'lucide-react';
+import { ColorBadge } from "../../components/color-badge";
+import { DresscodeBadgesColumn } from "../../components/dresscode-badges-column";
+import CustomCarousel from "../../components/Carousel/CustomCarousel";
 
 const MainPage = () => {
   const [isRSVPOpen, setIsRSVPOpen] = useState(false);
@@ -24,6 +27,7 @@ const MainPage = () => {
             alt="Pareja" 
             className="w-full h-full object-cover object-top animate-slow-zoom"
           />
+          {/* <CustomCarousel /> */}
           <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
         </div>
 
@@ -125,21 +129,21 @@ const MainPage = () => {
             >Formal / Gala</p>
           </div>
           
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
-            {/* Hombres */}
-            <div className="text-center space-y-6 z-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-black font-bold font-sans">Prohibidos</p>
-              <div className="grid grid-cols-2 gap-y-8 justify-items-center">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white border border-[#d1cfc7] shadow-sm" title="Blanco"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Blanco</span>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#1a2a3a] shadow-md" title="Azul Marino"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Azul Marino</span>
-                </div>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-12">
+            <DresscodeBadgesColumn 
+              title={"Prohibidos"} 
+              colors={[
+                { text: "", color: "#DBE2E9" },
+                { text: "", color: "#D8C8D1 " },
+                { text: "", color: "#ECC3B2 " },
+                { text: "", color: "#A2E4B8 " },
+                { text: "", color: "#EBE49A " },
+                { text: "", color: "#D9E1E2" },
+                { text: "Blanco", color: "#FFFFFF " },
+                { text: "Crema", color: "#FDFBD4 " },
+                { text: "Marfil", color: "#F0DFCC" },
+              ]}
+            />
 
             <div 
               className="absolute inset-0 z-0 w-full h-full
@@ -148,29 +152,6 @@ const MainPage = () => {
             >
               <Clip />
               <div className="md:hidden absolute inset-0 bg-[#fffed8]/80"></div>
-            </div>
-
-            {/* Mujeres */}
-            <div className="text-center space-y-6 z-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-black font-bold font-sans">Evitar</p>
-              <div className="grid grid-cols-2 gap-y-8 justify-items-center">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white border border-[#d1cfc7] shadow-sm"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Blanco</span>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#f5f5dc] border border-[#d1cfc7] shadow-sm"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Beige</span>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#2d3436] shadow-md"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Negro</span>
-                </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#f8c8dc] border border-[#e5b1c5] shadow-sm"></div>
-                  <span className="text-[10px] font-sans text-[#7a7a7a] uppercase tracking-widest">Rosa</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
