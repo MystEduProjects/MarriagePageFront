@@ -26,7 +26,7 @@ const RenderItem = ({ item, index, scrollX = 0, itemWidth = 0 }) => {
           style={{
             opacity,
           }}
-          className="w-full h-full object-cover mx-auto transition-opacity duration-100"
+          className="w-full h-full object-cover object-top mx-auto transition-opacity duration-100"
         />
       </picture>
     </div>

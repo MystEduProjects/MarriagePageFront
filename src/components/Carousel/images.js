@@ -1,6 +1,11 @@
 export const images = [
   {
     text: '',
+    mobileImage: 'carousel/main.jpeg',
+    desktopImage: 'carousel/main.jpeg',
+  },
+  {
+    text: '',
     mobileImage: 'carousel/9:16-1.jpeg',
     desktopImage: 'carousel/16:9-1.jpeg',
   },
