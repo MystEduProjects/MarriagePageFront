@@ -23,7 +23,7 @@ const MainPage = () => {
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <CustomCarousel />
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
 
         <div className="relative z-10 text-center text-[#fffaed] p-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 text-shadow-sm text-shadow-[#fffaed]">
