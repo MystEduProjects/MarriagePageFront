@@ -65,11 +65,13 @@ const CustomCarousel = () => {
   }, [isAutoPlay]);
 
   return (
-    <div className="flex-1 w-full h-full">
+    <div className="flex-1 w-full h-full scrollbar-none">
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none w-full h-full"
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none w-full h-full
+          [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+        "
       >
         {data.map((item, index) => (
           <div key={`list_item${index}`} className="snap-start shrink-0 w-full h-full">
