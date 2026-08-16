@@ -123,7 +123,9 @@ const MainPage = () => {
             >Formal / Gala</p>
           </div>
           
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
+          <div className="grid grid-cols-2 grid-rows-[auto_auto] gap-8 md:grid-rows-1 md:grid-cols-3 md:gap-12">
+            <p className="text-xs text-center uppercase tracking-[0.2em] text-black font-bold font-sans z-2 row-1 col-span-2 w-full md:hidden">Colores Prohibidos</p>
+
             <DresscodeBadgesColumn 
               title={"Prohibidos"} 
               colors={[
@@ -135,7 +137,7 @@ const MainPage = () => {
 
             <div 
               className="absolute inset-0 z-0 w-full h-full
-                md:row-span-1 md:flex md:items-center md:justify-center md:static
+                md:row-span-1 md:col-start-2 md:row-start-1 md:flex md:items-center md:justify-center md:static
               "
             >
               <Clip />
